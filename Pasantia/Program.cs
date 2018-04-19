@@ -30,6 +30,7 @@ namespace Pasantia
         {
             Proyecto proyecto = new Proyecto();
             Empresa aux = new Empresa();
+            int i;
             string cuil;
 
             proyecto.Id = proyectos.Count + 1;
@@ -53,10 +54,12 @@ namespace Pasantia
                 Console.WriteLine("Ingrese cuil de la empresa a la que pertenece el proyecto: ");
                 cuil = Console.ReadLine();
 
-                if (aux.VerificarEmpresa(cuil, empresas) == null)
-                    Console.WriteLine("La empresa no existe");
+                i = aux.VerificarEmpresa(cuil, empresas);
+
+                if (i == -1)
+                    Console.WriteLine("No se encontro la empresa");
                 else
-                    proyecto.Empresa = aux.VerificarEmpresa(cuil, empresas);
+                    proyecto.Empresa = empresas[i];
             } while (proyecto.Empresa == null);
             
 
@@ -66,8 +69,6 @@ namespace Pasantia
         static Alumno CrearAlumno()
         {
             Alumno alumno = new Alumno();
-            Proyecto aux = new Proyecto();
-            string nombre;
             char opc;
 
             Console.WriteLine("Ingrese dni");
@@ -89,25 +90,65 @@ namespace Pasantia
                 opc = char.ToUpper(opc);
             } while (opc != 'N');
 
-            
-
-            do {
-                Console.WriteLine("Ingrese nombre proyecto al que pertenece este alumno");
-                nombre = Console.ReadLine();
-
-                if (aux.VerificarProyect(nombre, proyectos) == null)
-                    Console.WriteLine("La empresa no existe");
-                else
-                    alumno.Proyecto = aux.VerificarProyect(nombre, proyectos);
-            } while (alumno.Proyecto == null);
+            alumno.Proyecto = null;
 
             return alumno;
         }
 
+        static void Menu()
+        {
+            char opc;
+
+            do {
+                Console.WriteLine("1>Crear Empresa\n2>Crear Alumno\n3>Crear Proyecto");
+                opc = char.Parse(Console.ReadLine());
+
+                if (opc == '1')
+                    empresas.Add(CrearEmpresa());
+
+                if (opc == '2')
+                    alumnos.Add(CrearAlumno());
+
+                if (opc == '3' && empresas.Count == 0)
+                    Console.WriteLine("1ro debe haber una empresa creada");
+                else if (opc == '3' && empresas.Count != 0)
+                    proyectos.Add(CrearProyecto());
+
+                Console.WriteLine("Desea Continuar con el menu? S/N");
+                opc = char.Parse(Console.ReadLine());
+
+                opc = char.ToUpper(opc);
+            } while (opc != 'N');
+        }
+
+        static void Mostrar()
+        {
+            Console.WriteLine("Los alumnos son: ");
+
+            foreach (var item in alumnos)
+                item.MostrarAlumnos();
+
+            Console.WriteLine("Los proyectos son: ");
+
+            foreach (var item in proyectos)
+                item.MostrarProyecto();
+
+            Console.WriteLine("Las empresas son: ");
+
+            foreach (var item in empresas)
+                item.MostrarEmpresa();
+        }
 
         static void Main(string[] args)
         {
+            Alumno aux = new Alumno();
 
+            Menu();
+
+            aux.OrdenarAlumnosPorProm(alumnos);
+            aux.AsignarAlumnosEnProyectos(alumnos, proyectos);
+
+            Mostrar();
         }
     }
 }

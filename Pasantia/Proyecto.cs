@@ -13,26 +13,24 @@ namespace Pasantia
         public string ObjetivoPro { get; set; }
         public string TipoPro { get; set; }
         public string HorasPro { get; set; }
-        public bool Status { get; set; } = true;
+        public bool Status { get; private set; } = true;
         public DateTime FechaInicioPro { get; set; }
         public DateTime FechaFinPro { get; set; }
         public int Vacantes { get; set; }
         public Empresa Empresa { get; set; }
 
 
+        
 
-
-        public Proyecto VerificarProyect(string nombre, List<Proyecto> proyectos)
+        public void CambiarStatus()
         {
-            foreach (var item in proyectos) {
-
-                if (item.NombrePro == nombre)
-                    return item;
-            }
-
-            return null;
+            if (Vacantes == 0)
+                Status = false;
         }
 
-
+        public void MostrarProyecto()
+        {
+            Console.WriteLine(NombrePro + "  " + ObjetivoPro + "  " + HorasPro + "  " + TipoPro + "  que pertenece a la empresa" + Empresa.NombreEmp);
+        }
     }
 }

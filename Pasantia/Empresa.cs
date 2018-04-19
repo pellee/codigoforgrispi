@@ -15,18 +15,23 @@ namespace Pasantia
 
 
 
-        public Empresa VerificarEmpresa(string cuil, List<Empresa> empresas)
+        public int VerificarEmpresa(string cuil, List<Empresa> empresas)
         {
-            if (empresas.Count == 0)
-                return null;
+            if(empresas.Count == 0)
+                return -1;
 
-            foreach (var item in empresas) {
-
-                if (item.CuilEmp == cuil)
-                    return item;
+            for (int i = 0; i < empresas.Count; i++)
+            {
+                if (cuil == empresas[i].CuilEmp)
+                    return i;
             }
 
-            return null;
+            return -1;
+        }
+
+        public void MostrarEmpresa()
+        {
+            Console.WriteLine(NombreEmp + "  " + DireccionEmp + "\n");
         }
 
     }
